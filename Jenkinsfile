@@ -1,10 +1,32 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:12-alpine'
+        }
+    }
+    environment {
+        CI = 'true'
+    }
     stages {
-        stage('Build') {
+        stage('Installation') {
             steps {
-                sh 'echo "Hello world!"'
+              sh 'npm i'
             }
+        }
+        stage('Test') {
+            steps {
+              sh 'npm test'
+            }
+            post {
+              always {
+                sh 'echp send coverage'
+              }
+            }
+        }
+    }
+    post {
+        failure {
+            echo "mail to: team@example.com, subject: 'The Pipeline failed :('"
         }
     }
 }

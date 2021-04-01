@@ -4,29 +4,11 @@ pipeline {
             image 'node:12-alpine'
         }
     }
-    environment {
-        CI = 'true'
-    }
     stages {
-        stage('Installation') {
+        stage('Build') {
             steps {
-              sh 'npm i'
+                sh 'npm install'
             }
-        }
-        stage('Test') {
-            steps {
-              sh 'echo test'
-            }
-            post {
-              always {
-                sh 'echo send coverage'
-              }
-            }
-        }
-    }
-    post {
-        failure {
-            echo "mail to: team@example.com, subject: 'The Pipeline failed :('"
         }
     }
 }

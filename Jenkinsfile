@@ -15,11 +15,11 @@ pipeline {
         }
         stage('Test') {
             steps {
-              sh 'npm test'
+              sh 'echo test'
             }
             post {
               always {
-                sh 'echp send coverage'
+                sh 'echo send coverage'
               }
             }
         }

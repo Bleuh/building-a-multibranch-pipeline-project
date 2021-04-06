@@ -1,6 +1,13 @@
 pipeline {
     agent any
     stages {
+        when {
+            anyOf {
+                branch 'release/dev';
+                branch 'release/uat';
+                branch 'master';
+            }
+        }
         stage('Install') {
             steps {
               echo 'TODO: install other part if needed'

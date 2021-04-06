@@ -1,55 +1,26 @@
 pipeline {
     agent any
     stages {
-        when {
-            anyOf {
-                branch 'release/dev';
-                branch 'release/uat';
-                branch 'master';
-            }
-        }
         stage('Install') {
             steps {
-              echo 'TODO: install other part if needed'
+              sh 'npm i'
             }
         }
-        stage('Build1') {
-            when {
-                anyOf {
-                  branch 'release/dev';
-                  branch 'release/uat';
-                  branch 'master';
+        stage("test"){
+            steps{
+                sh "npm test"
+            }
+            post{
+                always{
+                    echo "====++++always++++===="
                 }
-            }
-            steps {
-                echo 'npm run deploy:prepare'
-            }
-        }
-        stage('Build2') {
-            when {
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                success{
+                    echo "====++++test executed successfully++++===="
                 }
-            }
-            steps {
-                echo 'npm run deploy:prepare'
-            }
-        }
-        stage('Build') {
-            when {
-              allOf {
-                anyOf {
-                  branch 'release/dev';
-                  branch 'release/uat';
-                  branch 'master';
+                failure{
+                    echo "====++++test execution failed++++===="
                 }
-                expression {
-                  currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                }
-              }
-            }
-            steps {
-                echo 'npm run deploy:prepare'
+
             }
         }
     }
